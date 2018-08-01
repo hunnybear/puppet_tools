@@ -8,15 +8,17 @@ import puppet_tools.hiera
 DEFAULT_DOMAIN = 'tylerjachetta.net'
 
 _PROPERTY_FIELDS = ('property_name', 'lookup_name', 'required', 'default')
+
 _PROPERTY_DEFAULTS = (None, False, None)
 
-Property = collections.namedtuple(
-    'Property', _PROPERTY_FIELDS, defaults=_PROPERTY_DEFAULTS)
+# TODO when known on python 3, use defaults instead of the wonky verbosity in
+# PROP_CONFIG declaration down there
+Property = collections.namedtuple('Property', _PROPERTY_FIELDS)
 
 # TODO get prop and module config from config file
 PROP_CONFIG = [
-    Property('role', required=True),
-    Property('cluster'),
+    Property('role', 'role', required=True, default=None),
+    Property('cluster', 'cluster', required=False, default=None),
 ]
 
 MODULE_CONFIG = []
@@ -46,7 +48,8 @@ def create_props_dict(node_name, config=PROP_CONFIG):
 
     for prop in config:
         lookup_name = prop.lookup_name or prop.property_name
-        props[prop.property_name] = puppet_tools.hiera.lookup(lookup_name, node=node_name)
+        val = puppet_tools.hiera.lookup(lookup_name, node=node_name)
+        props[prop.property_name] = val
 
     return props
 
