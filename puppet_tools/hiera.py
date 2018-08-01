@@ -13,7 +13,7 @@ import subprocess
 LOOKUP_ARG_NODE = '--node'
 
 
-def lookup(*keys, node=None, compile_puppet=True):
+def lookup(key, node=None, compile_puppet=True):
     """ Returns a puppet lookup [Hiera lookup].
 
     Does a puppet lookup (which used to be accessed via hiera lookup) command
@@ -35,8 +35,6 @@ def lookup(*keys, node=None, compile_puppet=True):
     cmd = ['puppet', 'lookup']
 
     if node is not None:
-        cmd += [LOOKUP_ARG_NODE, node]
-
-    cmd += keys
+        cmd += [key, LOOKUP_ARG_NODE, node]
 
     return subprocess.check_output(cmd)
