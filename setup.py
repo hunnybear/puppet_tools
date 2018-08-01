@@ -13,7 +13,7 @@ setuptools.setup(
     url="tylerjachetta.net",
     description="Utilities for interacting with puppet",
     long_description="todo",
-    requires=['hb_libs', 'PyYAML'],
+    install_requires=['hb_libs', 'PyYAML'],
     license="GPG version 3",
     packages=setuptools.find_packages(),
     data_files=[],
