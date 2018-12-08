@@ -20,6 +20,7 @@ setuptools.setup(
     entry_points={
         'console_scripts': [
             'puppet_enc=puppet_tools.enc:run',
+            'masterless_puppet=puppet_tools.masterless_apply:run',
         ],
     }
 )
