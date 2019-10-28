@@ -31,6 +31,10 @@ REPO_RPMS = {PUPPET_RELEASE: 'https://yum.puppetlabs.com/{0}-el-7.noarch.rpm'.fo
 
 INSTALL_ENV = 'install'
 
+# For FORGE_MODULES, key is the module name and the value is the version,
+# None as a version/value translates to 'latest', basically.
+FORGE_MODULES = {'puppet-hiera': None}
+
 
 def _get_puppet_path():
     prefix, puppet_path = [s.strip() for s in subprocess.check_output(['whereis', 'puppet']).split(':')]
@@ -89,6 +93,13 @@ def _setup_env(environment=INSTALL_ENV):
         pull_cmd = ['git', '--git-dir', environment_path + '/.git', 'pull']
         subprocess.check_call(pull_cmd)
 
+    # install some puppetforge modules
+    for module, version in FORGE_MODULES.items():
+        cmd = [puppet, 'module', 'install', '--environment', environment, module, '--verbose']
+        if version is not None:
+            cmd += ['--version', str(version)]
+
+        subprocess.check_call(cmd)
 
 def _do_puppet_run(role, environment=INSTALL_ENV):
 
